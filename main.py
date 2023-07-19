@@ -21,20 +21,8 @@ def create_bingo_card():
 
     return bingo_card
 
-def generate_bingo_card_pdf():
-    # Create a Bingo card
-    card1 = create_bingo_card()
-    card2 = create_bingo_card()
-    # Transpose the card to have columns instead of rows
-    transposed_card1 = list(zip(*card1))
-    transposed_card2 = list(zip(*card2))
-
-    # Create a new PDF document
-    doc = SimpleDocTemplate("bingo_cards.pdf", pagesize=landscape(A4))
-
-    # Define the table data and style
-    data1 = [["B", "I", "N", "G", "O"]] + transposed_card1
-    data2 = [["B", "I", "N", "G", "O"]] + transposed_card2
+def generate_bingo_card_pdf(amount: int):
+    story = []
     style = [
         ("BACKGROUND", (0, 0), (-1, 0), colors.grey),  # Grey background for the BINGO row
         ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),  # White text for the BINGO row
@@ -50,18 +38,33 @@ def generate_bingo_card_pdf():
         ("TOPPADDING", (0, 0), (-1, 0), 0.2*inch),  # Top padding for header
         ("GRID", (0, 0), (-1, -1), 0.5, colors.black)  # Add grid lines
     ]
+    
+    # Create a new PDF document
+    doc = SimpleDocTemplate("801-1000 bingo_cards.pdf", pagesize=landscape(A4))
+    for i in range(amount):
+        # Create a Bingo card
+        card1 = create_bingo_card()
+        card2 = create_bingo_card()
+        # Transpose the card to have columns instead of rows
+        transposed_card1 = list(zip(*card1))
+        transposed_card2 = list(zip(*card2))
 
-    # Create the table and apply the style
-    table1 = Table(data1, colWidths=0.9*inch, rowHeights=1*inch)
-    table2 = Table(data2, colWidths=0.9*inch, rowHeights=1*inch)
-    table1.setStyle(TableStyle(style))
-    table2.setStyle(TableStyle(style))
+        # Define the table data and style
+        data1 = [["B", "I", "N", "G", "O"]] + transposed_card1
+        data2 = [["B", "I", "N", "G", "O"]] + transposed_card2
+        
 
-    # Divide the page into two equal parts for two Bingo cards
-    story = [Table([[table1, table2]])]
+        # Create the table and apply the style
+        table1 = Table(data1, colWidths=0.9*inch, rowHeights=1*inch)
+        table2 = Table(data2, colWidths=0.9*inch, rowHeights=1*inch)
+        table1.setStyle(TableStyle(style))
+        table2.setStyle(TableStyle(style))
+
+        # Divide the page into two equal parts for two Bingo cards
+        story.append(Table([[table1, table2]]))
 
     # Build the PDF document and save it
     doc.build(story)
 
 # Generate two Bingo cards on a single A4 landscape page
-generate_bingo_card_pdf()
+generate_bingo_card_pdf(100)
