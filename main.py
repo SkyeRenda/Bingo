@@ -40,7 +40,7 @@ def generate_bingo_card_pdf(amount: int):
     ]
     
     # Create a new PDF document
-    doc = SimpleDocTemplate("801-1000 bingo_cards.pdf", pagesize=landscape(A4))
+    doc = SimpleDocTemplate("1801-2000 bingo_cards.pdf", pagesize=landscape(A4))
     for i in range(amount):
         # Create a Bingo card
         card1 = create_bingo_card()
